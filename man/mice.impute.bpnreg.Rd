@@ -23,19 +23,12 @@ Impute with Projected Normal Regression
 }
 \examples{
 N <- 100
-X <- rnorm(N)
-theta <- numeric(N)
-for (i in 1:N) {
-    B <- matrix(c(3.5, 1, -3, 0), nrow = 2, byrow = T)
-    mu_i <- c(1, X[i]) \%*\% B
-    Y <- mvtnorm::rmvnorm(N, mu_i, diag(2))
-    U <- Y / sqrt(sum(Y^2))
-    theta[i] <- atan2(U[2], U[1])
-}
+x <- rnorm(N)
+B <- matrix(c(3.5, 1, -3, 0), nrow = 2, byrow = TRUE)
+y <- pnreg_draw(x, B)
 mis <- sample(N, size = floor(0.5 * N), replace = FALSE)
-theta[mis] <- NA
-ry <- !is.na(theta)
-X1 <- cbind(rep(1, N), X)
+y[mis] <- NA
+ry <- !is.na(y)
 
-mice.impute.bpnreg(theta, ry, X1)
+mice.impute.bpnreg(y, ry, x)
 }
