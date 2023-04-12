@@ -21,7 +21,7 @@ x <- rnorm(N)
 B <- matrix(c(3.5, 1, -3, 0), nrow = 2, byrow = TRUE)
 y <- pnreg_draw(x, B)
 ry <- !is.na(y)
-dat <- construct_data_bpnreg(y, ry, x)
+dat <- construct_modeling_data(y, ry, x)
 invisible(
     utils::capture.output(
         fit <- bpnreg::bpnr(theta ~ ., data = dat, its = 2000, burn = 1000)
