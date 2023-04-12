@@ -36,7 +36,7 @@ convert2MinusPiPlusPi <- function(theta) {
 construct_modeling_data <- function(y, ry, x) {
     if (is.vector(x)) {
         dat <- as.data.frame(cbind(y[ry], x[ry]))
-    } else if (is.matrix(x) | is.data.frame(x)) {
+    } else if (is.matrix(x) || is.data.frame(x)) {
         dat <- as.data.frame(cbind(y[ry], x[ry,]))
     }
 
