@@ -30,7 +30,7 @@ mice.impute.bpnreg <- function(y, ry, x,...) {
             )
         )
 
-    B <- get_posterior_draws_B(fit)
+    B <- get_posterior_draws_pnreg(fit)
 
     if (is.vector(x)) {
         x_tilde <- x[!ry]
@@ -58,6 +58,45 @@ convert2MinusPiPlusPi <- function(theta) {
     theta <- theta %% (2*pi)
     phi <- ifelse(theta >= 0 & theta < pi, theta, theta - (2 * pi))
     return(phi)
+}
+
+#' Draw from Projected Normal Regression
+#'
+#' @param x A numeric matrix size N x k of covariates. (No leading 1s column.)
+#' @param B A numeric matrix size k x 2 of regression coefficients.
+#'
+#' @return theta A numeric vector size N.
+#' @export
+#'
+#' @examples
+#' x <- rnorm(25)
+#' B <- matrix(c(1, 5, 0, -2), byrow = TRUE, nrow = 2)
+#' (pnreg_draw(x, B))
+pnreg_draw <- function(x, B) {
+    N <- 0
+    if (is.vector(x) & is.numeric(x)) {
+        N <- length(x)
+    } else if (is.matrix(x) & is.numeric(x)) {
+        N <- nrow(x)
+    } else if (is.data.frame(x)) {
+        N <- nrow(x)
+        x <- stats::model.matrix(~ ., x)[,-1]
+    } else {
+
+    }
+    if (ncol(B) != 2) {
+
+    }
+    ones <- rep(1, N)
+    x <- cbind(ones, x)
+    mu <- x %*% B
+    y_1 <- stats::rnorm(N, mu[,1], 1)
+    y_2 <- stats::rnorm(N, mu[,2], 1)
+    ssq <- sqrt(y_1^2 + y_2^2)
+    U_1 <- y_1 / ssq
+    U_2 <- y_2 / ssq
+    theta <- atan2(U_2, U_1)
+    return(theta)
 }
 
 #' Construct the Data Frame for bpnreg
@@ -91,37 +130,6 @@ construct_data_bpnreg <- function(y, ry, x) {
     return(dat)
 }
 
-#' Draw from Projected Normal Regression
-#'
-#' @param x A numeric matrix size N x k of covariates. (No leading 1s column.)
-#' @param B A numeric matrix size k x 2 of regression coefficients.
-#'
-#' @return theta A numeric vector size N.
-#' @export
-#'
-#' @examples
-#' x <- rnorm(25)
-#' B <- matrix(c(1, 5, 0, -2), byrow = TRUE, nrow = 2)
-#' (pnreg_draw(x, B))
-pnreg_draw <- function(x, B) {
-    N <- 0
-    if (is.vector(x)) {
-        N <- length(x)
-    } else if (is.matrix(x) | is.data.frame(x)) {
-        N <- nrow(x)
-    }
-    ones <- rep(1, N)
-    x <- cbind(ones, x)
-    mu <- x %*% B
-    y_1 <- stats::rnorm(N, mu[,1], 1)
-    y_2 <- stats::rnorm(N, mu[,2], 1)
-    ssq <- sqrt(y_1^2 + y_2^2)
-    U_1 <- y_1 / ssq
-    U_2 <- y_2 / ssq
-    theta <- atan2(U_2, U_1)
-    return(theta)
-}
-
 #' Collect Posterior Draws for Coefficients
 #'
 #' @param fit A fitted object from bpnreg package.
@@ -141,8 +149,8 @@ pnreg_draw <- function(x, B) {
 #'         fit <- bpnreg::bpnr(theta ~ ., data = dat, its = 2000, burn = 1000)
 #'         )
 #'     )
-#' (get_posterior_draws_B(fit))
-get_posterior_draws_B <- function(fit) {
+#' (get_posterior_draws_pnreg(fit))
+get_posterior_draws_pnreg <- function(fit) {
     b1 <- fit$beta1; b2 <- fit$beta2
     s <- sample(nrow(b1), size = 1)
     B <- cbind(b1[s,], b2[s,])
