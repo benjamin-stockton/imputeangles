@@ -76,7 +76,7 @@ test_that("Posterior draws have the correct dimensions", {
 # Test 3: Imputation by PN Regression works
 ####################################
 
-test_that("Imputation is correct length", {
+test_that("PN Imputation is correct length", {
 
     N <- 30
     x <- matrix(rnorm(2 * N), ncol = 2)
@@ -89,7 +89,7 @@ test_that("Imputation is correct length", {
     expect_length(y_imp, N - sum(ry))
 })
 
-test_that("Imputation isn't run when the data are complete", {
+test_that("PN Imputation isn't run when the data are complete", {
 
     N <- 30
     x <- matrix(rnorm(2 * N), ncol = 2)
