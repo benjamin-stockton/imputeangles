@@ -3,7 +3,7 @@ Title: Impute Incomplete Angular Data
 Version: 0.0.0.9000
 Authors@R: 
     person("Benjamin", "Stockton", , "benjamin.stockton@uconn.edu", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           comment = c(ORCID = "0000-0002-3820-5293"))
 Description: Impute incomplete angular data for use with the mice package. Several imputation models for imputation with circular-linear regression are available.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -11,8 +11,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
     bpnreg,
-    circular,
-    mvtnorm
+    circglmbayes,
+    circular
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

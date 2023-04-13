@@ -2,6 +2,9 @@
 
 export(construct_modeling_data)
 export(convert2MinusPiPlusPi)
-export(get_posterior_draws_pnreg)
 export(mice.impute.bpnreg)
+export(mice.impute.vmreg)
 export(pnreg_draw)
+export(posterior_draw_pnreg)
+export(ppd_draws_pnreg)
+export(ppd_draws_vmreg)

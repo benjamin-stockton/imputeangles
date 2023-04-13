@@ -34,14 +34,9 @@ mice.impute.bpnreg <- function(y, ry, x, ...) {
     )
   )
 
-  B <- get_posterior_draws_pnreg(fit)
+  B <- posterior_draw_pnreg(fit)
 
-  if (is.vector(x)) {
-    x_tilde <- x[!ry]
-  } else if (is.matrix(x) | is.data.frame(x)) {
-    x_tilde <- x[!ry, ]
-  }
-  theta_imp <- pnreg_draw(x_tilde, B)
+  theta_imp <- ppd_draws_pnreg(B, ry, x)
 
   return(theta_imp)
 }
@@ -89,7 +84,7 @@ pnreg_draw <- function(x, B) {
 #'
 #' @param fit A fitted object from bpnreg package.
 #'
-#' @return A numeric matrix size k x 2 of regression coefficients
+#' @return B A numeric matrix size k x 2 of regression coefficients
 #' @export
 #'
 #' @examples
@@ -104,11 +99,50 @@ pnreg_draw <- function(x, B) {
 #'     fit <- bpnreg::bpnr(theta ~ ., data = dat, its = 2000, burn = 1000)
 #'   )
 #' )
-#' (get_posterior_draws_pnreg(fit))
-get_posterior_draws_pnreg <- function(fit) {
+#' (posterior_draw_pnreg(fit))
+posterior_draw_pnreg <- function(fit) {
   b1 <- fit$beta1
   b2 <- fit$beta2
   s <- sample(nrow(b1), size = 1)
   B <- cbind(b1[s, ], b2[s, ])
   return(B)
+}
+
+
+
+
+
+#' Collect a Posterior Predictive Draw of Projected Normal Regression
+#'
+#' @param B A numeric matrix size k x 2 of regression coefficients
+#' @param ry A logical vector of length N indicating whether the ith observation is observed (TRUE) or missing (FALSE).
+#' @param x Completely observed covariates with dimension N x k.
+#'
+#' @return theta_ppd A numeric vector of size n_mis.
+#' @export
+#'
+#' @examples
+#' N <- 100
+#' x <- rnorm(N)
+#' B <- matrix(c(3.5, 1, -3, 0), nrow = 2, byrow = TRUE)
+#' y <- pnreg_draw(x, B)
+#' mis <- sample(N, size = floor(0.5 * N), replace = FALSE)
+#' y[mis] <- NA
+#' ry <- !is.na(y)
+#' dat <- construct_modeling_data(y, ry, x)
+#' invisible(
+#'   utils::capture.output(
+#'     fit <- bpnreg::bpnr(theta ~ ., data = dat, its = 2000, burn = 1000)
+#'   )
+#' )
+#' B <- posterior_draw_pnreg(fit)
+#' ppd_draws_pnreg(B, ry, x)
+ppd_draws_pnreg <- function(B, ry, x) {
+  if (is.vector(x)) {
+    x_tilde <- x[!ry]
+  } else if (is.matrix(x) | is.data.frame(x)) {
+    x_tilde <- x[!ry, ]
+  }
+  theta_ppd <- pnreg_draw(x_tilde, B)
+  return(theta_ppd)
 }

@@ -68,8 +68,8 @@ test_that("Posterior draws have the correct dimensions", {
             fit <- bpnreg::bpnr(theta ~ ., data = dat, its = iters, burn = 1000)
             )
         )
-    expect_equal(ncol(get_posterior_draws_pnreg(fit)), 2)
-    expect_equal(nrow(get_posterior_draws_pnreg(fit)), 3)
+    expect_equal(ncol(posterior_draw_pnreg(fit)), 2)
+    expect_equal(nrow(posterior_draw_pnreg(fit)), 3)
 })
 
 ####################################
@@ -100,3 +100,30 @@ test_that("Imputation isn't run when the data are complete", {
 
 })
 
+####################################
+# Test 4: Posterior Predictive Draws
+####################################
+
+test_that("PPD draws for PN reg work with a vector covariate", {
+
+    N <- 30
+    x <- matrix(rnorm(2 * N), ncol = 2)
+    B <- matrix(c(3.5, 1, -3, 0, 3, -0.5), ncol = 2, byrow = TRUE)
+    y <- pnreg_draw(x, B)
+    mis <- sample(N, size = floor(0.5 * N), replace = FALSE)
+    y[mis] <- NA
+    ry <- !is.na(y)
+    expect_length(ppd_draws_pnreg(B, ry, x), N - sum(ry))
+})
+
+test_that("PPD draws for PN reg work with a covariate matrix", {
+
+    N <- 30
+    x <- matrix(rnorm(2 * N), ncol = 2)
+    B <- matrix(c(3.5, 1, -3, 0, 3, -0.5), ncol = 2, byrow = TRUE)
+    y <- pnreg_draw(x, B)
+    mis <- sample(N, size = floor(0.5 * N), replace = FALSE)
+    y[mis] <- NA
+    ry <- !is.na(y)
+    expect_length(ppd_draws_pnreg(B, ry, x), N - sum(ry))
+})
