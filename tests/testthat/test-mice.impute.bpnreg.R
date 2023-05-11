@@ -100,6 +100,18 @@ test_that("PN Imputation isn't run when the data are complete", {
 
 })
 
+test_that("PN Imputation works for single missing obervation", {
+    N <- 30
+    x <- matrix(rnorm(2 * N), ncol = 2)
+    B <- matrix(c(3.5, 1, -3, 0, 3, -0.5), ncol = 2, byrow = TRUE)
+    y <- pnreg_draw(x, B)
+    mis <- sample(N, size = 1, replace = FALSE)
+    y[mis] <- NA
+    ry <- !is.na(y)
+    y_imp <- mice.impute.bpnreg(y, ry, x)
+    expect_length(y_imp, N - sum(ry))
+})
+
 ####################################
 # Test 4: Posterior Predictive Draws
 ####################################
@@ -107,8 +119,8 @@ test_that("PN Imputation isn't run when the data are complete", {
 test_that("PPD draws for PN reg work with a vector covariate", {
 
     N <- 30
-    x <- matrix(rnorm(2 * N), ncol = 2)
-    B <- matrix(c(3.5, 1, -3, 0, 3, -0.5), ncol = 2, byrow = TRUE)
+    x <- matrix(rnorm(N), ncol = 1)
+    B <- matrix(c(3.5, 1, -3, 0), ncol = 2, byrow = TRUE)
     y <- pnreg_draw(x, B)
     mis <- sample(N, size = floor(0.5 * N), replace = FALSE)
     y[mis] <- NA

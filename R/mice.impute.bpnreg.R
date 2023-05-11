@@ -55,21 +55,25 @@ mice.impute.bpnreg <- function(y, ry, x, ...) {
 #' (pnreg_draw(x, B))
 pnreg_draw <- function(x, B) {
   N <- 0
-  if (is.vector(x) && is.numeric(x)) {
+  if (is.vector(x) && is.numeric(x) && nrow(B) == 2) {
     N <- length(x)
+    x <- cbind(rep(1, N), x)
+  } else if (is.vector(x) && is.numeric(x) && nrow(B) > 2) {
+    N <- 1
+    x <- matrix(c(1, x), nrow = 1)
   } else if (is.matrix(x) && is.numeric(x)) {
     N <- nrow(x)
+    x <- cbind(rep(1, N), x)
   } else if (is.data.frame(x)) {
     N <- nrow(x)
     x <- stats::model.matrix(~., x)[, -1]
+    x <- cbind(rep(1, N), x)
   } else {
     stop("Data is not numeric!")
   }
   if (ncol(B) != 2) {
     stop("Coefficient matrix B doesn't have 2 columns!")
   }
-  ones <- rep(1, N)
-  x <- cbind(ones, x)
   mu <- x %*% B
   y_1 <- stats::rnorm(N, mu[, 1], 1)
   y_2 <- stats::rnorm(N, mu[, 2], 1)
