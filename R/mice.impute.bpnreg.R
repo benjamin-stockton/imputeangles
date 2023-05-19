@@ -55,24 +55,28 @@ mice.impute.bpnreg <- function(y, ry, x, ...) {
 #' (pnreg_draw(x, B))
 pnreg_draw <- function(x, B) {
   N <- 0
-  if (is.vector(x) && is.numeric(x) && nrow(B) == 2) {
-    N <- length(x)
-    x <- cbind(rep(1, N), x)
-  } else if (is.vector(x) && is.numeric(x) && nrow(B) > 2) {
-    N <- 1
-    x <- matrix(c(1, x), nrow = 1)
-  } else if (is.matrix(x) && is.numeric(x)) {
-    N <- nrow(x)
-    x <- cbind(rep(1, N), x)
-  } else if (is.data.frame(x)) {
-    N <- nrow(x)
-    x <- stats::model.matrix(~., x)[, -1]
-    x <- cbind(rep(1, N), x)
-  } else {
-    stop("Data is not numeric!")
-  }
   if (ncol(B) != 2) {
     stop("Coefficient matrix B doesn't have 2 columns!")
+  }
+  if (is.vector(x) && is.numeric(x) && nrow(B) == 2) {
+    # Single Predictor with >= 1 observation
+      N <- length(x)
+      x <- cbind(rep(1, N), x)
+  } else if (is.vector(x) && is.numeric(x) && nrow(B) > 2) {
+    # Multiple Predictor with 1 observation
+      N <- 1
+      x <- matrix(c(1, x), nrow = 1)
+  } else if (is.matrix(x) && is.numeric(x)) {
+    # Multiple Predictors and observations in a matrix
+      N <- nrow(x)
+      x <- cbind(rep(1, N), x)
+  } else if (is.data.frame(x)) {
+    # Multiple Predictors and observations in a dataframe
+      N <- nrow(x)
+      x <- stats::model.matrix(~., x)[, -1]
+      x <- cbind(rep(1, N), x)
+  } else {
+      stop("Data is not numeric!")
   }
   mu <- x %*% B
   y_1 <- stats::rnorm(N, mu[, 1], 1)

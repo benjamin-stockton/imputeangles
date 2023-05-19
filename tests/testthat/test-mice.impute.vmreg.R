@@ -26,6 +26,34 @@ test_that("vM Imputation isn't run when the data are complete", {
 
 })
 
+test_that("vM Imputation for a single missing observation", {
+
+    N <- 30
+    x <- matrix(rnorm(2 * N), ncol = 2)
+    B <- matrix(c(3.5, 1, -3, 0, 3, -0.5), ncol = 2, byrow = TRUE)
+    y <- pnreg_draw(x, B)
+    mis <- sample(N, size = 1, replace = FALSE)
+    y[mis] <- NA
+    ry <- !is.na(y)
+    y_imp <- mice.impute.vmreg(y, ry, x)
+    expect_length(y_imp, N - sum(ry))
+
+})
+
+test_that("vM Imputation for a single missing observation with a single predictor", {
+
+    N <- 30
+    x <- matrix(rnorm(N), ncol = 1)
+    B <- matrix(c(3.5, 1, -3, 0), ncol = 2, byrow = TRUE)
+    y <- pnreg_draw(x, B)
+    mis <- sample(N, size = 1, replace = FALSE)
+    y[mis] <- NA
+    ry <- !is.na(y)
+    y_imp <- mice.impute.vmreg(y, ry, x)
+    expect_length(y_imp, N - sum(ry))
+
+})
+
 ####################################
 # Test 2: Posterior Predictive Draws
 ####################################

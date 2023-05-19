@@ -76,26 +76,29 @@ mice.impute.vmreg <- function(y, ry, x,...) {
 ppd_draws_vmreg <- function(fit, ry, x) {
     all_chains <- fit$all_chains
 
-    K <- 1
-    if (is.vector(x)) {
+    K <- nrow(coef(fit)) - 2
+    N <- sum(!ry)
+
+    if (K == 1 && N >= 1) {
         x_tilde <- x[!ry]
-    } else if (is.matrix(x) | is.data.frame(x)) {
+    } else if (K > 1 && N == 1) {
         x_tilde <- x[!ry,]
-        K <- ncol(x)
+    } else if (K > 1 && N > 1) {
+        x_tilde <- x[!ry,]
     }
 
     s <- sample(nrow(all_chains), size = 1)
     beta_pd <- all_chains[s, 3:(K+2)]
 
-    theta_imp <- numeric(sum(!ry))
+    theta_imp <- numeric(N)
+    if (is.vector(x_tilde)) {
+        eta_i <- x_tilde * beta_pd
+    } else if (is.matrix(x_tilde) | is.data.frame(x_tilde)) {
+        eta_i <- (x_tilde %*% beta_pd)[,1]
+    }
 
-    for (i in 1:sum(!ry)) {
-        if (is.vector(x_tilde)) {
-            eta_i <- x_tilde[i] * beta_pd
-        } else if (is.matrix(x_tilde) | is.data.frame(x_tilde)) {
-            eta_i <- x_tilde[i, ] %*% beta_pd
-        }
-        mu_i <- circular::circular(all_chains[s, "b0_chain"] + 2 * atan(eta_i))
+    for (i in 1:N) {
+        mu_i <- circular::circular(all_chains[s, "b0_chain"] + 2 * atan(eta_i[i]))
         theta_imp[i] <- circular::rvonmises(1, mu_i, all_chains[s, "kp_chain"])
     }
     theta_imp <- as.numeric(theta_imp)
