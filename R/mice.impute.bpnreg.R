@@ -111,8 +111,8 @@ pnreg_draw <- function(x, B) {
 posterior_draw_pnreg <- function(fit) {
   b1 <- fit$beta1
   b2 <- fit$beta2
-  s <- sample(nrow(b1), size = 1)
-  B <- cbind(b1[s, ], b2[s, ])
+  rand_s <- sample(nrow(b1), size = 1)
+  B <- cbind(b1[rand_s, ], b2[rand_s, ])
   return(B)
 }
 

@@ -87,8 +87,8 @@ ppd_draws_vmreg <- function(fit, ry, x) {
         x_tilde <- x[!ry,]
     }
 
-    s <- sample(nrow(all_chains), size = 1)
-    beta_pd <- all_chains[s, 3:(K+2)]
+    rand_s <- sample(nrow(all_chains), size = 1)
+    beta_pd <- all_chains[rand_s, 3:(K+2)]
 
     theta_imp <- numeric(N)
     if (is.vector(x_tilde)) {
@@ -98,8 +98,8 @@ ppd_draws_vmreg <- function(fit, ry, x) {
     }
 
     for (i in 1:N) {
-        mu_i <- circular::circular(all_chains[s, "b0_chain"] + 2 * atan(eta_i[i]))
-        theta_imp[i] <- circular::rvonmises(1, mu_i, all_chains[s, "kp_chain"])
+        mu_i <- circular::circular(all_chains[rand_s, "b0_chain"] + 2 * atan(eta_i[i]))
+        theta_imp[i] <- circular::rvonmises(1, mu_i, all_chains[rand_s, "kp_chain"])
     }
     theta_imp <- as.numeric(theta_imp)
     return(theta_imp)
