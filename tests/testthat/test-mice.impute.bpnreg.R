@@ -30,6 +30,22 @@ test_that("PN Regression works with numeric predictor matrix", {
     expect_length(y, N)
 })
 
+test_that("PN Regression works with data frame", {
+
+    N <- 100
+    x <- rnorm(N)
+    B <- matrix(c(3.5, 1, -3, 0), nrow = 2, byrow = TRUE)
+    x2 <- rnorm(N, sd = 2)
+    B2 <- rbind(B, c(3, -.5))
+    x <- data.frame(x1 = x,
+                    x2 = x2)
+    y <- pnreg_draw(x, B2)
+
+    expect_true(ncol(x) == 2)
+    expect_true(is.numeric(y))
+    expect_length(y, N)
+})
+
 
 test_that("PN regression throws an error for three column B", {
     N <- 100
@@ -100,6 +116,21 @@ test_that("PN Imputation isn't run when the data are complete", {
 
 })
 
+test_that("PN Imputation works with data frame input", {
+
+    N <- 30
+    x <- matrix(rnorm(2 * N), ncol = 2)
+    B <- matrix(c(3.5, 1, -3, 0, 3, -0.5), ncol = 2, byrow = TRUE)
+    y <- pnreg_draw(x, B)
+    mis <- sample(N, size = floor(0.5 * N), replace = FALSE)
+    y[mis] <- NA
+    ry <- !is.na(y)
+    x <- data.frame(x1 = x[,1],
+                     x2 = x[,2])
+    y_imp <- mice.impute.bpnreg(y, ry, x)
+    expect_length(y_imp, N - sum(ry))
+})
+
 test_that("PN Imputation works for single missing obervation", {
     N <- 30
     x <- matrix(rnorm(2 * N), ncol = 2)
@@ -111,6 +142,37 @@ test_that("PN Imputation works for single missing obervation", {
     y_imp <- mice.impute.bpnreg(y, ry, x)
     expect_length(y_imp, N - sum(ry))
 })
+
+# test_that("MICE works when missing on multiple variables", {
+#     N <- 30
+#     x <- matrix(rnorm(2 * N), ncol = 2)
+#     B <- matrix(c(3.5, 1, -3, 0, 3, -0.5), ncol = 2, byrow = TRUE)
+#     y <- pnreg_draw(x, B)
+#     mis <- sample(N, size = 5, replace = FALSE)
+#     y[mis] <- NA
+#     mis2 <- sample(N, size = 5, replace = FALSE)
+#     x[mis2,1] <- NA
+#
+#     df <- data.frame(
+#         theta = y,
+#         x1 = x[,1],
+#         x2 = x[,2],
+#         u1 = cos(y),
+#         u2 = sin(y)
+#     )
+#
+#     pred_mat <- matrix(c(0, 1, 1, 0, 0,
+#                          0, 0, 1, 1, 1,
+#                          0, 1, 0, 1, 1,
+#                          1, 1, 1, 0, 0,
+#                          1, 1, 1, 0, 0),
+#                        byrow = TRUE, ncol = 5)
+#
+#     expect_no_error(mice::mice(df, m = 1,
+#                                method = c("bpnreg", "pmm", "pmm", "~cos(theta)", "~sin(theta)"),
+#                                predictorMatrix = pred_mat,
+#                                printFlag = FALSE))
+# })
 
 ####################################
 # Test 4: Posterior Predictive Draws

@@ -41,7 +41,7 @@ construct_modeling_data <- function(y, ry, x) {
     }
 
     dat$theta <- convert2MinusPiPlusPi(dat[,1])
-    dat <- dat[,-1]
+    dat <- as.data.frame(dat[,-1])
     return(dat)
 }
 

@@ -73,7 +73,7 @@ pnreg_draw <- function(x, B) {
   } else if (is.data.frame(x)) {
     # Multiple Predictors and observations in a dataframe
       N <- nrow(x)
-      x <- stats::model.matrix(~., x)[, -1]
+      x <- stats::model.matrix(~., data = x)[, -1]
       x <- cbind(rep(1, N), x)
   } else {
       stop("Data is not numeric!")
