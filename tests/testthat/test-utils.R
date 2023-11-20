@@ -27,7 +27,7 @@ test_that("Constucted data for modeling has 'theta' column", {
     N <- 100
     x <- matrix(rnorm(2 * N), ncol = 2)
     B <- matrix(c(3.5, 1, -3, 0, 3, -0.5), ncol = 2, byrow = TRUE)
-    y <- pnreg_draw(x, B)
+    y <- bpnreg_draw(x, B)
     mis <- sample(N, size = floor(0.5 * N), replace = FALSE)
     y[mis] <- NA
     ry <- !is.na(y)

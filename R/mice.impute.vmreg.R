@@ -12,7 +12,7 @@
 #' N <- 100
 #' x <- rnorm(N)
 #' B <- matrix(c(3.5, 1, -3, 0), nrow = 2, byrow = TRUE)
-#' y <- pnreg_draw(x, B)
+#' y <- bpnreg_draw(x, B)
 #' mis <- sample(N, size = floor(0.5 * N), replace = FALSE)
 #' y[mis] <- NA
 #' ry <- !is.na(y)
@@ -62,7 +62,7 @@ mice.impute.vmreg <- function(y, ry, x,...) {
 #' N <- 100
 #' x <- rnorm(N)
 #' B <- matrix(c(3.5, 1, -3, 0), nrow = 2, byrow = TRUE)
-#' y <- pnreg_draw(x, B)
+#' y <- bpnreg_draw(x, B)
 #' mis <- sample(N, size = floor(0.5 * N), replace = FALSE)
 #' y[mis] <- NA
 #' ry <- !is.na(y)

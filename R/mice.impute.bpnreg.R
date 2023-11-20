@@ -12,7 +12,7 @@
 #' N <- 100
 #' x <- rnorm(N)
 #' B <- matrix(c(3.5, 1, -3, 0), nrow = 2, byrow = TRUE)
-#' y <- pnreg_draw(x, B)
+#' y <- bpnreg_draw(x, B)
 #' mis <- sample(N, size = floor(0.5 * N), replace = FALSE)
 #' y[mis] <- NA
 #' ry <- !is.na(y)
@@ -34,9 +34,9 @@ mice.impute.bpnreg <- function(y, ry, x, ...) {
     )
   )
 
-  B <- posterior_draw_pnreg(fit)
+  B <- posterior_draw_bpnreg(fit)
 
-  theta_imp <- ppd_draws_pnreg(B, ry, x)
+  theta_imp <- ppd_draws_bpnreg(B, ry, x)
 
   return(theta_imp)
 }
@@ -52,8 +52,8 @@ mice.impute.bpnreg <- function(y, ry, x, ...) {
 #' @examples
 #' x <- rnorm(25)
 #' B <- matrix(c(1, 5, 0, -2), byrow = TRUE, nrow = 2)
-#' (pnreg_draw(x, B))
-pnreg_draw <- function(x, B) {
+#' (bpnreg_draw(x, B))
+bpnreg_draw <- function(x, B) {
   N <- 0
   if (ncol(B) != 2) {
     stop("Coefficient matrix B doesn't have 2 columns!")
@@ -99,7 +99,7 @@ pnreg_draw <- function(x, B) {
 #' N <- 100
 #' x <- rnorm(N)
 #' B <- matrix(c(3.5, 1, -3, 0), nrow = 2, byrow = TRUE)
-#' y <- pnreg_draw(x, B)
+#' y <- bpnreg_draw(x, B)
 #' ry <- !is.na(y)
 #' dat <- construct_modeling_data(y, ry, x)
 #' invisible(
@@ -107,18 +107,14 @@ pnreg_draw <- function(x, B) {
 #'     fit <- bpnreg::bpnr(theta ~ ., data = dat, its = 2000, burn = 1000)
 #'   )
 #' )
-#' (posterior_draw_pnreg(fit))
-posterior_draw_pnreg <- function(fit) {
+#' (posterior_draw_bpnreg(fit))
+posterior_draw_bpnreg <- function(fit) {
   b1 <- fit$beta1
   b2 <- fit$beta2
   rand_s <- sample(nrow(b1), size = 1)
   B <- cbind(b1[rand_s, ], b2[rand_s, ])
   return(B)
 }
-
-
-
-
 
 #' Collect a Posterior Predictive Draw of Projected Normal Regression
 #'
@@ -133,7 +129,7 @@ posterior_draw_pnreg <- function(fit) {
 #' N <- 100
 #' x <- rnorm(N)
 #' B <- matrix(c(3.5, 1, -3, 0), nrow = 2, byrow = TRUE)
-#' y <- pnreg_draw(x, B)
+#' y <- bpnreg_draw(x, B)
 #' mis <- sample(N, size = floor(0.5 * N), replace = FALSE)
 #' y[mis] <- NA
 #' ry <- !is.na(y)
@@ -143,14 +139,14 @@ posterior_draw_pnreg <- function(fit) {
 #'     fit <- bpnreg::bpnr(theta ~ ., data = dat, its = 2000, burn = 1000)
 #'   )
 #' )
-#' B <- posterior_draw_pnreg(fit)
-#' ppd_draws_pnreg(B, ry, x)
-ppd_draws_pnreg <- function(B, ry, x) {
+#' B <- posterior_draw_bpnreg(fit)
+#' ppd_draws_bpnreg(B, ry, x)
+ppd_draws_bpnreg <- function(B, ry, x) {
   if (is.vector(x)) {
     x_tilde <- x[!ry]
   } else if (is.matrix(x) | is.data.frame(x)) {
     x_tilde <- x[!ry, ]
   }
-  theta_ppd <- pnreg_draw(x_tilde, B)
+  theta_ppd <- bpnreg_draw(x_tilde, B)
   return(theta_ppd)
 }
