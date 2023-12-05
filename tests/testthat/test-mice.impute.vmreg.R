@@ -1,5 +1,5 @@
 ####################################
-# Test 1: Imputation by PN Regression works
+# Test 1: Imputation by vM Regression works
 ####################################
 
 test_that("vM Imputation is correct length", {

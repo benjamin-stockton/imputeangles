@@ -50,7 +50,7 @@ test_that("pnreggen works for single missing obervation", {
     mis <- 15
     y[mis] <- NA
     ry <- !is.na(y)
-    y_imp <- mice.impute.pnreggen(y, ry, x, show_message = TRUE, show_exceptions = TRUE)
+    y_imp <- mice.impute.pnreggen(y, ry, x)
     expect_length(y_imp, N - sum(ry))
 })
 

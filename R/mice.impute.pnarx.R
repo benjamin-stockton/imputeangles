@@ -1,9 +1,9 @@
-#' Impute Incomplete Angular Data with Projected Normal Regression with General Covariance
+#' Impute with Projected Normal AR with Exogenous Predictors
 #'
-#' @param y The incomplete vector of N angles to be imputed.
-#' @param ry A logical vector of length N indicating whether the ith observation is observed (TRUE) or missing (FALSE).
-#' @param x Completely observed covariates with dimension N x k.
-#' @param ... Additional parameters (unused)
+#' @param y angles
+#' @param ry response indicators
+#' @param x predictors
+#' @param ... other arguments to pass to fit_pn_arx_model()
 #'
 #' @return A numeric vector of length n_mis.
 #' @export
@@ -18,9 +18,9 @@
 #' y[mis] <- NA
 #' ry <- !is.na(y)
 #'
-#' mice.impute.pnreggen(y, ry, x)
+#' mice.impute.pnarx(y, ry, x)
 #' ## End(Not run)
-mice.impute.pnreggen <- function(y, ry, x, ...) {
+mice.impute.pnarx <- function(y, ry, x, ...) {
     if (sum(ry) == length(y)) {
         stop("No missing data! :)")
     }
@@ -39,10 +39,11 @@ mice.impute.pnreggen <- function(y, ry, x, ...) {
     }
     # invisible(
     #     utils::capture.output(
-    fit <- pnregstan::fit_pnreg_gen_model(theta = y[ry],
-                                               X = X_mat,
-                                               X_ppd = X_ppd_mat,
-                                               refresh = 0)
+    fit <- pnregstan::fit_pn_arx_model(theta = y[ry],
+                                          X = X_mat,
+                                          X_ppd = X_ppd_mat,
+                                          refresh = 0,
+                                       show_messages = FALSE)
     #     )
     # )
 

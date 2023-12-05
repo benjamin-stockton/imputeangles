@@ -22,6 +22,7 @@ A numeric vector of length n_mis.
 Impute Incomplete Angular Data with Projected Normal Regression with General Covariance
 }
 \examples{
+## Not run:
 N <- 100
 x <- rnorm(N)
 B <- matrix(c(3.5, 1, -3, 0), nrow = 2, byrow = TRUE)
@@ -31,4 +32,5 @@ y[mis] <- NA
 ry <- !is.na(y)
 
 mice.impute.pnreggen(y, ry, x)
+## End(Not run)
 }

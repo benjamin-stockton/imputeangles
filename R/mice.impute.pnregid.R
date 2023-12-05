@@ -40,7 +40,9 @@ mice.impute.pnregid <- function(y, ry, x, ...) {
             fit <- pnregstan::fit_pnreg_identity_model(theta = y[ry],
                                                        X = X_mat,
                                                        X_ppd = X_ppd_mat,
-                                                       refresh = 0)
+                                                       refresh = 0,
+                                                       show_messages = FALSE,
+                                                       show_exceptions = FALSE)
     #     )
     # )
 
