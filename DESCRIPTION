@@ -14,10 +14,13 @@ Imports:
     circglmbayes,
     circular,
     cmdstanr,
+    ggforce,
+    ggplot2,
     pnregstan,
     posterior,
     stats,
     utils
 Suggests: 
+    mice,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
