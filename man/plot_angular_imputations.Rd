@@ -4,7 +4,7 @@
 \alias{plot_angular_imputations}
 \title{Plot Angular Imputations}
 \usage{
-plot_angular_imputations(imps, r = 0.25, alpha = 0.5, by_id = FALSE)
+plot_angular_imputations(imps, r = 0.35, alpha = 0.75, by_id = FALSE)
 }
 \arguments{
 \item{imps}{A mids object produced by mice}

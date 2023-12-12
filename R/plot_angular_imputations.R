@@ -27,9 +27,10 @@
 #                                predictorMatrix = pred_mat,
 #                                printFlag = FALSE)
 #     plot_angular_imputations(imps)
-plot_angular_imputations <- function(imps, r = 0.25, alpha = 0.5, by_id = FALSE) {
+plot_angular_imputations <- function(imps, r = 0.35, alpha = 0.75, by_id = FALSE) {
     c_imps <- mice::complete(imps, "long", include = TRUE)
     mis_ind <- which(imps$where[,"theta"])
+    num_imps <- imps$m
 
     c_imps$Type <- "Observed"
     c_imps[c_imps$.id %in% mis_ind & c_imps$.imp > 0,"Type"] <- "Imputed"
@@ -37,20 +38,29 @@ plot_angular_imputations <- function(imps, r = 0.25, alpha = 0.5, by_id = FALSE)
         (p1 <- ggplot2::ggplot(c_imps, ggplot2::aes(.imp, 0)) +
              ggforce::geom_circle(ggplot2::aes(x0 = .imp, y0 = 0, r = r), linetype = "dashed") +
              ggplot2::geom_point(ggplot2::aes(x = .imp + r * cos(theta), y = r * sin(theta), color = Type), alpha = alpha) +
-             ggplot2::coord_cartesian(ylim = c(-1, 1)) +
-            ggplot2::labs(x = "Imputation Number", y = "imputeangles.Rproj"))
+            ggplot2::scale_x_continuous(breaks = 0:num_imps, labels = 0:num_imps) +
+            ggplot2::coord_fixed(ylim = c(-1/3 * (num_imps+1), 1/3 * (num_imps+1))) +
+             ggplot2::scale_color_manual(values = c("#B61A51B3","#006CC2B3")) +
+            ggplot2::labs(x = "Imputation Number", y = "") +
+            ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white", colour = "black"),
+                           panel.grid = ggplot2::element_blank(),
+                           axis.text.y = ggplot2::element_blank(),
+                           axis.ticks.length.y = ggplot2::unit(0, "cm")))
     }
     else if (by_id) {
         mis_imps <- c_imps[c_imps$.id %in% mis_ind & c_imps$.imp > 0,]
         (p1 <- ggplot2::ggplot(mis_imps, ggplot2::aes(.imp, 0)) +
-                ggplot2::geom_point() +
+                ggplot2::geom_point(color = "#B61A51B3") +
                 ggplot2::geom_segment(ggplot2::aes(x = .imp, xend = .imp + r * cos(theta),
-                                                   y = 0, yend = r * sin(theta),
-                                                   color = as.factor(.id)),
-                                      alpha = alpha, arrow = ggplot2::arrow(length = unit(0.15,"cm"))) +
-                ggplot2::coord_cartesian(ylim = c(-1, 1)) +
-                ggplot2::labs(x = "Imputation Number", y = "imputeangles.Rproj") +
-                facet_wrap(as.factor(.id)~.))
+                                                   y = 0, yend = r * sin(theta)),
+                                      alpha = alpha, arrow = ggplot2::arrow(length = ggplot2::unit(0.15,"cm"))) +
+                ggplot2::coord_fixed(ylim = c(-1/6 * (num_imps+1), 1/6 * (num_imps+1))) +
+                ggplot2::labs(x = "Imputation Number", y = "") +
+                ggplot2::facet_wrap(as.factor(.id)~.) +
+                ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white", colour = "black"),
+                               panel.grid = ggplot2::element_blank(),
+                               axis.text.y = ggplot2::element_blank(),
+                               axis.ticks.length.y = ggplot2::unit(0, "cm")))
     }
 
     return(p1)
