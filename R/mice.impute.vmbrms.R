@@ -37,11 +37,11 @@ mice.impute.vmbrms <- function(y, ry, x,...) {
     }
 
     fit <- pnregstan::fit_vm_brms_model(theta = y[ry],
-                                               X = X_mat,
-                                               X_ppd = X_ppd_mat,
-                                               refresh = 0,
-                                               show_messages = FALSE,
-                                               show_exceptions = FALSE)
+                                       X = X_mat,
+                                       X_ppd = X_ppd_mat,
+                                       refresh = 0,
+                                       show_messages = FALSE,
+                                       show_exceptions = FALSE)
 
     theta_ppd <- as.matrix(posterior::as_draws_df(fit$draws(variables = "theta_ppd")))
 

@@ -40,9 +40,14 @@ mice.impute.pnreggen <- function(y, ry, x, ...) {
     # invisible(
     #     utils::capture.output(
     fit <- pnregstan::fit_pnreg_gen_model(theta = y[ry],
-                                               X = X_mat,
-                                               X_ppd = X_ppd_mat,
-                                               refresh = 0)
+                                           X = X_mat,
+                                           X_ppd = X_ppd_mat,
+                                           refresh = 0,
+                                          chains = 2,
+                                          iter_warmup = 1000,
+                                          iter_sampling = 1000,
+                                          show_messages = FALSE,
+                                          show_exceptions = FALSE)
     #     )
     # )
 
