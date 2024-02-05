@@ -39,22 +39,22 @@ mice.impute.pnarxid <- function(y, ry, x, ...) {
         #     X_ppd_mat <- as.matrix(x[!ry,], nrow = sum(!ry), ncol = ncol(x))
         # }
     }
-    # invisible(
-    #     utils::capture.output(
+    invisible(
+        utils::capture.output(
     fit <- pnregstan::fit_pn_arx_id_model(theta = y,
                                        X = X_mat,
                                        X_ppd = X_mat,
                                        refresh = 1000,
                                        show_messages = FALSE,
                                        show_exceptions = FALSE)
-    #     )
-    # )
+        )
+    )
 
     theta_ppd <- as.matrix(posterior::as_draws_df(fit$draws(variables = "theta_ppd")))
 
     N_ppd <- sum(!ry)
-    theta_imp <- theta_ppd[nrow(theta_ppd), 1:(length(y)-1)]
-    theta_imp <- theta_imp[!ry]
+    id_mis <- which(ry == 0)
+    theta_imp <- theta_ppd[nrow(theta_ppd), id_mis]
 
     return(theta_imp)
 }

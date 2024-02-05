@@ -35,16 +35,16 @@ mice.impute.pnregid <- function(y, ry, x, ...) {
             X_ppd_mat <- as.matrix(x[!ry,], nrow = sum(!ry), ncol = ncol(x))
         }
     }
-    # invisible(
-    #     utils::capture.output(
+    invisible(
+        utils::capture.output(
             fit <- pnregstan::fit_pnreg_identity_model(theta = y[ry],
                                                        X = X_mat,
                                                        X_ppd = X_ppd_mat,
                                                        refresh = 0,
                                                        show_messages = FALSE,
                                                        show_exceptions = FALSE)
-    #     )
-    # )
+        )
+    )
 
     theta_ppd <- as.matrix(posterior::as_draws_df(fit$draws(variables = "theta_ppd")))
 
