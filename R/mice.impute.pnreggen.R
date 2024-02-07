@@ -44,7 +44,7 @@ mice.impute.pnreggen <- function(y, ry, x, ...) {
                                            X_ppd = X_ppd_mat,
                                            refresh = 0,
                                           chains = 2,
-                                          iter_warmup = 1000,
+                                          iter_warmup = 3000,
                                           iter_sampling = 1000,
                                           show_messages = FALSE,
                                           show_exceptions = FALSE)

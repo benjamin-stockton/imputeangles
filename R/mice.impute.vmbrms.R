@@ -41,6 +41,9 @@ mice.impute.vmbrms <- function(y, ry, x,...) {
                                        X = X_mat,
                                        X_ppd = X_ppd_mat,
                                        refresh = 0,
+                                       iter_sampling = 1000,
+                                       iter_warmup = 2500,
+                                       adapt_delta = 0.83,
                                        show_messages = FALSE,
                                        show_exceptions = FALSE)
         )
