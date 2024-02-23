@@ -30,5 +30,5 @@ mis <- sample(N, size = floor(0.5 * N), replace = FALSE)
 y[mis] <- NA
 ry <- !is.na(y)
 
-mice.impute.vmbrrms(y, ry, x)
+mice.impute.vmbrms(y, ry, x)
 }

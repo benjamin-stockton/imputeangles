@@ -17,7 +17,7 @@
 #' y[mis] <- NA
 #' ry <- !is.na(y)
 #'
-#' mice.impute.vmbrrms(y, ry, x)
+#' mice.impute.vmbrms(y, ry, x)
 mice.impute.vmbrms <- function(y, ry, x,...) {
     if (sum(ry) == length(y)) {
         stop("No missing data! :)")
