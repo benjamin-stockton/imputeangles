@@ -20,6 +20,8 @@ plot_angular_imputations(
 \item{alpha}{numeric opacity for the points}
 
 \item{by_id}{bool Switch for plots of unit circles for each imputation or plots of vectors by id and by imputation}
+
+\item{overlay}{bool Swithc for whether angles should be plotted from the same origin}
 }
 \value{
 A ggplot object

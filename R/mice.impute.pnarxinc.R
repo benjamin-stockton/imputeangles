@@ -4,7 +4,7 @@
 #' The projected normal AR with exogenous predictors and identity covariance is
 #' with missing angular observations imputed during the sampling procedure. This
 #' integrates out the missingness from the model fitting so if missingness is only
-#' on \theta, then only one cycle should be necessary.
+#' on theta, then only one cycle should be necessary.
 #'
 #'
 #' @param y angles

@@ -7,6 +7,7 @@
 #' @param r numeric Radius for unit circles
 #' @param alpha numeric opacity for the points
 #' @param by_id bool Switch for plots of unit circles for each imputation or plots of vectors by id and by imputation
+#' @param overlay bool Swithc for whether angles should be plotted from the same origin
 #'
 #' @return A ggplot object
 #' @export

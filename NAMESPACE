@@ -3,6 +3,7 @@
 export(bpnreg_draw)
 export(construct_modeling_data)
 export(convert2MinusPiPlusPi)
+export(impute_pgpreginc)
 export(mice.impute.bpnreg)
 export(mice.impute.pnarx)
 export(mice.impute.pnarxid)
