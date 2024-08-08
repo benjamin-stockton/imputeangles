@@ -73,12 +73,14 @@ impute_pgpreginc <- function(loc, theta, x, M, ...) {
         theta_obs <- theta[rt]
 
         df <- data.frame(theta = c(theta_obs, theta_imp),
-                         .imp = rep(M, nrow(loc)),
+                         .imp = rep(m, nrow(loc)),
                          .id = 1:nrow(loc))
         loc_srt <- rbind(loc[rt,], loc[!rt,])
         x_srt <- rbind(x[rt,], x[!rt,])
         df <- cbind(df, loc_srt)
         df <- cbind(df, x_srt)
+        df$U1 <- cos(df$theta)
+        df$U2 <- sin(df$theta)
 
         return(df)
     })
