@@ -53,7 +53,8 @@ mice.impute.pnarxinc <- function(y, ry, x, ...) {
                                                   X_ppd = X_mat,
                                                   refresh = 1000,
                                                   show_messages = FALSE,
-                                                  show_exceptions = FALSE)
+                                                  show_exceptions = FALSE,
+                                                  ...)
         )
     )
 

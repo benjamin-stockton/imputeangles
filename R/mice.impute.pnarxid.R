@@ -44,9 +44,10 @@ mice.impute.pnarxid <- function(y, ry, x, ...) {
     fit <- pnregstan::fit_pn_arx_id_model(theta = y,
                                        X = X_mat,
                                        X_ppd = X_mat,
-                                       refresh = 1000,
+                                       refresh = 0,
                                        show_messages = FALSE,
-                                       show_exceptions = FALSE)
+                                       show_exceptions = FALSE,
+                                       ...)
         )
     )
 

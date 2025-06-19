@@ -12,6 +12,6 @@ test_that("PN ARX Incomplete Imputation is correct length", {
     y[mis] <- NA
     ry <- !is.na(y)
     y[mis] <- mean(y, na.rm = TRUE)
-    y_imp <- mice.impute.pnarxinc(y, ry, x)
+    y_imp <- mice.impute.pnarxinc(y, ry, x, weakly_inf_prior = TRUE)
     expect_length(y_imp, N - sum(ry))
 })

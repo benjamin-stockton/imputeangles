@@ -40,7 +40,8 @@ plot_angular_imputations <- function(imps, r = 0.35, alpha = 0.75, by_id = FALSE
              ggforce::geom_circle(ggplot2::aes(x0 = .imp, y0 = 0, r = r), linetype = "dashed") +
              ggplot2::geom_point(ggplot2::aes(x = .imp + r * cos(theta), y = r * sin(theta), color = Type), alpha = alpha) +
             ggplot2::scale_x_continuous(breaks = 0:num_imps, labels = 0:num_imps) +
-            ggplot2::coord_fixed(ylim = c(-1/3 * (num_imps+1), 1/3 * (num_imps+1))) +
+            # ggplot2::coord_fixed(ylim = c(1/3(num_imps+1), (num_imps+1))) +
+             ggplot2::coord_fixed(ylim = r * c(-1.25, 1.25)) +
              ggplot2::scale_color_manual(values = c("#B61A51B3","#006CC2B3")) +
             ggplot2::labs(x = "Imputation Number", y = "") +
             ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white", colour = "black"),

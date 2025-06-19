@@ -43,7 +43,8 @@ mice.impute.pnarx <- function(y, ry, x, ...) {
                                           X = X_mat,
                                           X_ppd = X_ppd_mat,
                                           refresh = 0,
-                                       show_messages = FALSE)
+                                       show_messages = FALSE,
+                                       ...)
     #     )
     # )
 
